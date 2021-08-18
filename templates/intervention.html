@@ -1,0 +1,216 @@
+{%extends "admin.html"%}
+{% block content%}
+
+<script type="text/javascript" src="{{url_for('static', filename='/scripts/table2excel.js')}}"></script>
+<style>
+table.GeneratedTable {
+  width: 100%;
+  background-color: #ffffff;
+  border-collapse: collapse;
+  border-width: 2px;
+  border-color: #d2d1cb;
+  border-style: solid;
+  color: #000000;
+}
+
+table.GeneratedTable td, table.GeneratedTable tr {
+  border-width: 2px;
+  border-color: #d2d1cb;
+  border-style: solid;
+  padding: 3px;
+}
+
+
+
+
+.main_c{
+
+align-items:left;
+}
+
+
+.texte{
+  display: block;
+  font-size: 16px;
+  font-family: sans-serif;
+  font-weight: 700;
+  color: #444;
+  line-height: 0.9;
+  padding: .6em 1.4em .5em .8em;
+  width: 100%;
+  max-width: 100%; /* useful when width is set to anything other than 100% */
+  box-sizing: border-box;
+  margin-left:10px;
+  margin-right:10px;
+  border: 2px solid #aaa;
+  box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+  border-radius: 6px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fff;
+}
+
+.liste::-ms-expand {
+  display: none;
+}
+/* Hover style */
+.texte:hover {
+  border-color: #00FFFF;
+}
+/* Focus style */
+.texte:focus {
+  border-color: #00FFFF;
+  /* It'd be nice to use -webkit-focus-ring-color here but it doesn't work on box-shadow */
+  box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+  box-shadow: 0 0 0 3px -moz-mac-focusring;
+  color: #222; 
+  outline: none;
+}
+table{
+margin-top:30px;
+margin-left:40px;
+}
+td {
+ 
+   padding: 10px;
+  }
+  .button {
+  background-image: linear-gradient(to right top, #cfd3d8, #c7d6e0, #bcd9e4, #b0dde5, #a5e1e1);
+  border-radius: 6px;
+  color: white;
+  padding: 7px 24px;
+  border:none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.button2:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+h3{font-family: times, Times New Roman, times-roman, georgia, serif;
+		font-size: 28px;
+		line-height: 40px;
+		letter-spacing: -1px;
+		color: 	#7393B3;
+		margin-left:40px} 
+</style>
+<div class="main_c">
+<h3>consulter les interventions des techniciens</h3>
+<table>	
+<!-- <tbody> -->
+<tr>
+<td><h4> date debut :<h4></td>
+<td><input class="texte"  type="date"  id="datedebut" ></td>
+<td><h4> date fin :<h4></td>
+<td><input class="texte"  type="date"  id="datefin" ></td>
+<td><input onclick="search()" type="submit" class="button button2" value="envoyer"></td>
+</tr>
+</table >
+{% if v2==True %} 
+<table id="exemple-table" class="GeneratedTable" >
+<tr>
+<td><b> ligne </b> </td>
+{% for a in l %}
+<td>{{a}}</td>
+{% endfor %}
+</tr>
+
+<tr>
+<td><b> poste</b></td>
+{% for b in ps %}
+<td>{{b}}</td>
+{% endfor %}
+</tr>
+<tr>
+<td><b> produit </b></td>
+{% for c in pr %}
+<td>{{c}}</td>
+{% endfor %}
+</tr>
+<tr>
+<td><b> intervenant</b></td>
+{% for d in interv %}
+<td>{{d}}</td>
+{% endfor %}
+</tr>
+
+<tr>
+<td><b> duré</b> </td>
+{% for h in dr %}
+<td>{{h}}</td>
+{% endfor %}
+</tr>
+<tr>
+<td><b> start date</b></td>
+{% for j in ds %}
+<td>{{j}}</td>
+{% endfor %}
+</tr>
+<tr>
+<td><b> finish date </b></td>
+{% for k in df %}
+<td>{{k}}</td>
+{% endfor %}
+</tr>
+<tr>
+<td><b> start time</b></td>
+{% for m in ts %}
+<td>{{m}}</td>
+{% endfor %}
+</tr>
+<tr>
+<td><b> finish time </b></td>
+{% for n in tf %}
+<td>{{n}}</td>
+{% endfor %}
+</tr>
+<tr>
+<td> <b>heure d'appel </b></td>
+{% for o in hp %}
+<td>{{o}}</td>
+{% endfor %}
+</tr>
+<tr>
+<td><b> description </b></td>
+{% for e in des %}
+<td>{{e}}</td>
+{% endfor %}
+</tr>
+<tr>
+<td><b> piece</b> </td>
+{% for f in piece %}
+<td>{{f}}</td>
+{% endfor %}
+</tr>
+<tr>
+<td><b> remarque</b></td>
+{% for g in rq %}
+<td>{{g}}</td>
+{% endfor %}
+</tr>
+</table>
+<button id="downloadexcel">Export to excel</button>
+{% endif %}
+<center><a class="pure-button" href="{{url_for('intervention')}}" >Reset All</a></center>
+</div>
+<script>
+document.getElementById('downloadexcel').addEventListener('click', function(){
+   var table2excel = new Table2Excel();
+  
+   table2excel.export(document.querySelectorAll("#exemple-table"));
+  });
+function search(){
+var datedebut=document.getElementById("datedebut").value;
+var datefin=document.getElementById("datefin").value;
+var path="/admin/home/intervention/"+datedebut+"/"+datefin;
+alert(path);
+  window.location.href=path;
+}
+</script>
+{%endblock%}

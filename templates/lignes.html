@@ -1,0 +1,220 @@
+{%extends "admin.html"%}
+{% block content%}
+<style>
+.main_c{
+
+align-items:center;
+}
+
+
+.texte{
+  display: block;
+  font-size: 16px;
+  font-family: sans-serif;
+  font-weight: 700;
+  color: #444;
+  line-height: 0.9;
+  padding: .6em 1.4em .5em .8em;
+  width: 100%;
+  max-width: 100%; /* useful when width is set to anything other than 100% */
+  box-sizing: border-box;
+  margin-left:10px;
+  margin-right:10px;
+  border: 2px solid #aaa;
+  box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+  border-radius: 6px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fff;
+}
+
+.liste::-ms-expand {
+  display: none;
+}
+/* Hover style */
+.texte:hover {
+  border-color: #00FFFF;
+}
+/* Focus style */
+.texte:focus {
+  border-color: #00FFFF;
+  /* It'd be nice to use -webkit-focus-ring-color here but it doesn't work on box-shadow */
+  box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+  box-shadow: 0 0 0 3px -moz-mac-focusring;
+  color: #222; 
+  outline: none;
+}
+table{
+margin-top:30px;
+margin-left:40px;
+}
+td {
+
+   padding: 10px;
+  }
+  .button {
+  background-image: linear-gradient(to right top, #cfd3d8, #c7d6e0, #bcd9e4, #b0dde5, #a5e1e1);
+  border-radius: 6px;
+  color: white;
+  padding: 7px 24px;
+  border:none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.button2:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+h3{font-family: times, Times New Roman, times-roman, georgia, serif;
+		font-size: 28px;
+		line-height: 40px;
+		letter-spacing: -1px;
+		color: 	#7393B3;
+		margin-left:40px}
+
+
+</style>
+<div class="main_c">
+<h3>vous trouverez ci dessous tout ce qui concerne les lignes de production</h3>
+<table>
+<tbody>
+<tr>
+<td><h4>ajouter une ligne </h4></td>
+<td><input class="texte" type="text" name="addline" id="addline" required
+       minlength="2" maxlength="30" > </td>
+<td><input type="submit" class="button button2" onclick="addlignes()" value="Submit"></td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td><h4> supprimer une ligne </h4></td>
+<td><select class="texte" id="delline">
+{% for element in Lliste %}
+<option>{{element}}</option>
+{% endfor %}
+</select> </td>
+<td><input type="submit" class="button button2"  onclick="deleteligne()" value="Submit"></td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td><h4> ajouter une poste </h4></td>
+<td><select class="texte" name="poste" id="liste1">
+{% for element in Lliste %}
+<option>{{element}}</option>
+{% endfor %}
+</select></td>
+<td><input class="texte" type="text" id="addposte"> </td>
+<td><input  type="submit" class="button button2"  onclick="addpostes()" value="Submit"></td>
+</tr>
+<tr>
+<td><h4> supprimer une poste </h4></td>
+<td><select  class="texte" name="poste" id="liste2" onchange="choose()">
+{% for element in Lliste %}
+<option>{{element}}</option>
+{% endfor %}
+</select></td>
+<td><select class="texte" name="poste" id="liste3">
+{% for poste in listp %}
+<option>{{poste}}</option>
+{% endfor %}
+</select> </td>
+<td><input type="submit" class="button button2"  onclick="deleteposte()" value="Submit"></td>
+</tr>
+<tr>
+<td><h4> ajouter un produit </h4></td>
+<td><select class="texte" name="produit" id="liste4">
+{% for element in Lliste %}
+<option>{{element}}</option>
+{% endfor %}
+</select></td>
+<td><input class="texte" type="text" id="addprod"></td>
+<td><input type="submit" class="button button2"  onclick="addproduit()" value="Submit"></td>
+</tr>
+<tr>
+<td><h4> supprimer un produit </h4></td>
+<td><select class="texte" name="produit" id="liste5" onchange="choose1()">
+{% for element in Lliste %}
+<option>{{element}}</option>
+{% endfor %}
+</select></td>
+<td><select class="texte" name="produit" id="liste6">
+{% for poste in listpr %}
+<option>{{poste}}</option>
+{% endfor %}
+</select></td>
+<td><input type="submit" class="button button2"  onclick="deleteproduit()" value="Submit"></td>
+</tr>
+</tbody>
+</table>
+<center><a class="pure-button" href="{{url_for('lignes')}}" >Reset All</a></center>
+  
+<script>
+function addlignes(){ 
+     
+	var nameligne = document.getElementById("addline").value;
+	window.location.href="/admin/home/lignes/add/"+nameligne;
+ }   
+
+function deleteligne(){
+    var e = document.getElementById("delline");
+    var deleteline = e.options[e.selectedIndex].value;
+    window.location.href="/admin/home/lignes/delete/"+deleteline;
+}
+function addpostes(){ 
+    var nameposte = document.getElementById("addposte").value;
+    var e = document.getElementById("liste1");
+    var chosenligne = e.options[e.selectedIndex].value;
+	alert(chosenligne);
+	window.location.href="/admin/home/lignes/poste/"+chosenligne+"/"+nameposte; 
+	   
+ }  
+function addpostes(){ 
+    var nameposte = document.getElementById("addposte").value;
+    var e = document.getElementById("liste1");
+    var chosenligne = e.options[e.selectedIndex].value;
+	
+	window.location.href="/admin/home/lignes/poste/"+chosenligne+"/"+nameposte; 
+	   
+ }   
+
+function choose(){
+    var e = document.getElementById("liste2");
+    var chosenligne = e.options[e.selectedIndex].value;
+	var path="/admin/home/lignes/delp/"+chosenligne;
+	window.location.href=path;
+}
+function deleteposte(){
+   var a = document.getElementById("liste3");
+   var post = a.options[a.selectedIndex].value;
+   var path=window.location.href
+   path=path+"/"+post;
+   window.location.href=path;
+  } 
+function addproduit(){ 
+    var nameproduit = document.getElementById("addprod").value;
+    var e = document.getElementById("liste4");
+    var chosenligne = e.options[e.selectedIndex].value;
+	window.location.href="/admin/home/lignes/produit/"+chosenligne+"/"+nameproduit; 
+	   
+ }
+ function choose1(){
+    var e = document.getElementById("liste5");
+    var chosenligne1 = e.options[e.selectedIndex].value;
+	var path="/admin/home/lignes/delprd/"+chosenligne1;
+	window.location.href=path;
+}
+function deleteproduit(){
+   var a = document.getElementById("liste6");
+   var produit = a.options[a.selectedIndex].value;
+   var path=window.location.href
+   path=path+"/"+produit;
+   window.location.href=path;
+} 
+  
+</script>
+{%endblock%}

@@ -1,0 +1,117 @@
+{%extends "admin.html"%}
+{% block content%}
+<style>
+.main_c{
+
+align-items:left;
+}
+
+
+.texte{
+  display: block;
+  font-size: 16px;
+  font-family: sans-serif;
+  font-weight: 700;
+  color: #444;
+  line-height: 0.9;
+  padding: .6em 1.4em .5em .8em;
+  width: 100%;
+  max-width: 100%; /* useful when width is set to anything other than 100% */
+  box-sizing: border-box;
+  margin-left:10px;
+  margin-right:10px;
+  border: 2px solid #aaa;
+  box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+  border-radius: 6px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fff;
+}
+
+.liste::-ms-expand {
+  display: none;
+}
+/* Hover style */
+.texte:hover {
+  border-color: #00FFFF;
+}
+/* Focus style */
+.texte:focus {
+  border-color: #00FFFF;
+  /* It'd be nice to use -webkit-focus-ring-color here but it doesn't work on box-shadow */
+  box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+  box-shadow: 0 0 0 3px -moz-mac-focusring;
+  color: #222; 
+  outline: none;
+}
+table{
+margin-top:30px;
+margin-left:40px;
+}
+td {
+
+   padding: 10px;
+  }
+  .button {
+  background-image: linear-gradient(to right top, #cfd3d8, #c7d6e0, #bcd9e4, #b0dde5, #a5e1e1);
+  border-radius: 6px;
+  color: white;
+  padding: 7px 24px;
+  border:none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.button2:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+</style>
+<div class="main_c">
+<table>
+<tbody>
+<tr>
+<td><h4> ajouter un technicien </h4></td>
+<td>Nom  :<input  type="text" class="texte" name="addname" id="addname" required
+       minlength="2" maxlength="30" ></td>
+<td>Matricule :<input type="text" class="texte" name="addmat" id="addmat" required
+       minlength="6" maxlength="6" ></td>
+<td><input type="submit"  class="button button2" onclick="addtech()" value="Submit"></td>
+</tr>
+<tr>
+<td><h4> supprimer un technicien </h4></td>
+<td><select class="texte" id="deltech">
+{% for item in Tliste %}
+<option>{{item}}</option>
+{% endfor %}
+</select> </td>
+<td><input type="submit"  class="button button2"  onclick="deletetech()" value="Submit"  ></td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<center><a class="pure-button" href="{{url_for('techniciens')}}" >Reset All</a></center>
+</div>
+<script>
+
+function addtech(){ 
+     
+	   var name = document.getElementById("addname").value;
+	   var mat = document.getElementById("addmat").value;
+	   window.location.href="/admin/home/techniciens/"+name+"/"+mat;
+ }   
+function deletetech(){
+      var e = document.getElementById("deltech");
+      var deletedtech = e.options[e.selectedIndex].value;
+	  window.location.href="/admin/home/techniciens/"+deletedtech;
+}
+	   
+</script>
+{%endblock%}
+

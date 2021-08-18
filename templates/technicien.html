@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+  <title>Interface Technicien </title>
+    <meta charset="UTF-8">
+   <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style1.css')}}" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 
+   </head>
+<body>
+
+  <div class="container">
+    <div class="content">
+      <img src="https://upload.wikimedia.org/wikipedia/fr/c/cc/LOGO_SAGEMCOM.png">
+    </div>
+	<table border="0" >
+    <tbody>
+    <tr>
+    <td>Ligne<select name="ligne" id="main_menu"  onchange="val()" class="liste" >
+        <option selected disabled >{{key}}</option>
+		<option value="DC5K">DC 5K</option>
+		<option value="DC6K">DC 6K</option>
+		<option value="GZP">GZP</option>
+		<option value="IBIS">IBIS</option>
+		<option value="EAU">EAU</option> 
+	 
+        </select> </td>
+    <td>Postes<select name="poste" id="sub_menu1"  class="liste">
+	<option value="" selected disabled hidden>-sélectionnez une poste-</option>
+	     {%for x in liste_ps%}
+		 <option >{{x}}</option>
+		  {% endfor %}
+		</select> </td>
+	<td>Produit<select name="produit" id="sub_menu2" class="liste">
+	   <option value="" selected disabled hidden>-sélectionnez un produit-</option>
+	     {%for y in liste_pr %}
+	    <option>{{y}}</option>
+		 {% endfor %}
+		 </select>
+	   </td>
+	</tr>
+	
+	<tr>
+	<td>date start<input  id="datestart" class="liste" type="date" ></td>
+	<td>time start<input id="timestart" class="liste" type="time"></td>
+	<td>date finish<input  id="datefinish" class="liste" type="date" ></td>
+	<td>time finish<input id="timefinish" class="liste" type="time"></td>
+	</tr>
+	<tr>
+	<td>intervenant<select name="intervenant" id="techmenu" class="liste">
+	   <option value="" selected disabled hidden>-technicien-</option>
+	     {%for z in listet %}
+	    <option>{{z}}</option>
+		 {% endfor %}
+		 </select>
+	   </td>
+	 <td>heure d'appel <input id="heure_d'appel" class="liste" type="time"> </td>
+	 {% if valid==True %}
+
+	 <td><p> Durée d'intervention : {{dure}} </p></td>
+     {%endif %}
+	</tr>
+	<tr>
+	
+	<td>Descrpition/action <textarea id="desc" class="texte"></textarea></td>
+	<td> Piece de recharge <textarea id="piece" class="texte"></textarea></td>
+	<td> remarque <textarea id="rq" class="texte"></textarea></td> 
+
+	<tr>
+	<td>&nbsp;</td>
+	
+	</tr>
+	</tbody>
+	</table> 
+	 <center><input class="button1" onclick="saveall()" type="submit" value="envoyer">
+	 <a class="button1"  href="{{url_for('login')}}">annuler</a></center>
+
+   </div><script>
+   
+ function val(){
+	var e = document.getElementById("main_menu");
+    var valeur = e.options[e.selectedIndex].value;
+    var path="/technicien/"+valeur;
+    window.location.href=path;
+	}
+function saveall(){
+    var ps = document.getElementById("sub_menu1");
+    var poste = ps.options[ps.selectedIndex].value;
+	var pr = document.getElementById("sub_menu2");
+    var produit = pr.options[pr.selectedIndex].value;
+	var t = document.getElementById("techmenu");
+    var technicien= t.options[t.selectedIndex].value;
+	var description=document.getElementById("desc").value;
+	var piece=document.getElementById("piece").value;
+    var date_start=document.getElementById("datestart").value;
+	var time_start=document.getElementById("timestart").value;
+    var date_finish=document.getElementById("datefinish").value;
+	var time_finish=document.getElementById("timefinish").value;
+	
+	t1=time_start.split(':');
+	t2=finish=time_finish.split(':');
+	var ts=(parseInt(t1[0]))*60+parseInt(t1[1]);
+	var tf=(parseInt(t2[0]))*60+parseInt(t2[1]);
+	d1=date_start.split('/');
+	d2=date_finish.split('/');
+	if( (ts>tf)&& (d1.toString()==d2.toString())){
+	alert('wrong finish date');
+	}
+	
+    var heurapp=document.getElementById("heure_d'appel").value;
+	var remarque=document.getElementById("rq").value;
+	var path=window.location.href;
+	path=path+"/"+poste+"/"+produit+"/"+technicien+"/"+description+"/"+piece+"/"+date_start+"/"+time_start+"/"+date_finish+"/"+time_finish+"/"+heurapp+"/"+remarque;
+	alert(path);
+	window.location.href=path;
+	
+}
+
+</script>
+  
+	</body>
+	</html>
